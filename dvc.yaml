@@ -23,6 +23,7 @@ stages:
     deps:
     - data/clean
     params:
+    - train.max_depth
     - train.learning_rate
     outs:
     - data/out
@@ -33,5 +34,5 @@ metrics:
   - metrics/gbc.yaml
 
 plots:
-  - images1/heatmap1.png
-  - images2/boxes.png
+  - images2/heatmap1.png
+  - images1/boxes.png
