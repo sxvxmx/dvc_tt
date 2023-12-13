@@ -18,11 +18,14 @@ data_test = pd.read_csv("data/clean/data_test_prepared.csv")
 data_train = pd.read_csv("data/clean/data_train_prepared.csv")
 target = pd.read_csv("data/clean/target.csv")
 
+with open("params.yaml","r") as s:
+    params = yaml.safe_load(s)
+
 data_train = data_train.drop("Unnamed: 0",axis=1)
 data_test = data_test.drop("Unnamed: 0",axis=1)
 target = target.drop("Unnamed: 0",axis=1)
 
-gbc_clf = GradientBoostingClassifier()
+gbc_clf = GradientBoostingClassifier(learning_rate=params["train"]["learning_rate"])
 gbc_clf.fit(data_train, target)
 
 out = pd.DataFrame({"pred":gbc_clf.predict(data_test)})

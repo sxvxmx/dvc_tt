@@ -12,8 +12,11 @@ from sklearn.model_selection import RandomizedSearchCV
 import warnings
 warnings.filterwarnings('ignore')
 
-with open("config.yml","r") as cfg:
-    cfg = yaml.safe_load(cfg)
+with open("config.yml","r") as f:
+    cfg = yaml.safe_load(f)
+
+with open("params.yaml","r") as s:
+    params = yaml.safe_load(s)
 
 data_test = pd.read_csv(cfg["datasets"]["space_titanic"]["test"])
 data_train = pd.read_csv(cfg["datasets"]["space_titanic"]["train"])
@@ -31,11 +34,11 @@ for i in range(len(num_col)):
     fig = sb.get_figure()
     fig.savefig("images/boxes.png") 
 
-data_train = data_train.drop(data_train[(data_train["RoomService"] > 10000)|
-                                        (data_train["FoodCourt"] > 20000)|
-                                        (data_train["ShoppingMall"] > 15000)|
-                                        (data_train["Spa"] > 18000)|
-                                        (data_train["VRDeck"] > 17000)].index)
+data_train = data_train.drop(data_train[(data_train["RoomService"] > 10000*params["prepare"]["scale"])|
+                                        (data_train["FoodCourt"] > 20000*params["prepare"]["scale"])|
+                                        (data_train["ShoppingMall"] > 15000*params["prepare"]["scale"])|
+                                        (data_train["Spa"] > 18000*params["prepare"]["scale"])|
+                                        (data_train["VRDeck"] > 17000*params["prepare"]["scale"])].index)
 
 data_train = data_train.drop_duplicates()
 data_test = data_test.drop_duplicates()
