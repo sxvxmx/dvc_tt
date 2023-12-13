@@ -1,5 +1,5 @@
 prepare:
-  scale: 0.99
+  scale: 0.8
 train:
   learning_rate: 0.05
   max_depth: 15
