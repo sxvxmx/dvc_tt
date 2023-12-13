@@ -1,23 +1,28 @@
 stages:
-  prepere:
-    cmd: python 1.ipynb
+  prepare:
+    cmd: python 1.py data/prep
     deps:
-    - .\datasets\space_tit_test.csv
-    - .\datasets\space_tit_train.csv
-    - config.yml
-  feature_eng:
-    cmd: python 2.ipynb
+    - 1.ipynb
+    - datasets/space_tit_test.csv
+    - datasets/space_tit_train.csv
+    params:
+    - prepare.scale
+    outs:
+    - data/prep
+  featurize:
+    cmd: python 2.py data/clean images
     deps:
-    - .\data\prep
-    - .\data\prep\data_test_cleaned.csv
-    - .\data\prep\data_train_cleaned.csv
-  model:
-    cmd: python 3.ipynb
+    - 2.py
+    - data/prep
+    outs:
+    - data/clean
+    - images
+  train:
+    cmd: python 3.py data/out models/model.pkl
     deps:
-    - .\data\clean
-    - .\data\clean\data_test_prepared.csv
-    - .\data\clean\data_train_prepared.csv
-  
-  
-plots:
-  - images/boxes.png
+    - data/clean
+    params:
+    - train.learning_rate
+    outs:
+    - data/out
+    - models/model.pkl
