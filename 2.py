@@ -6,6 +6,7 @@ import sklearn
 import yaml
 import math
 import seaborn as sns
+import os
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import RandomizedSearchCV
@@ -31,7 +32,6 @@ class autoLabelEncoder:
     def transform(self, data:pd.DataFrame, categories:list[str]) -> pd.DataFrame:
         for feat in categories:
             enc = self.cat_encoders[feat]
-            print(feat)
             data.loc[data[feat].notna(), feat] = enc.transform(data.loc[data[feat].notna(), feat])
         return data
     
@@ -91,11 +91,10 @@ h1 = sns.heatmap(corr1, center=0,
             square=True, linewidths=.5, cbar_kws={"shrink": .5},ax=axs[0])
 h2 = sns.heatmap(corr2, center=0,
             square=True, linewidths=.5, cbar_kws={"shrink": .5},ax=axs[1])
-fig = h1.get_figure()
-fig.savefig("images/heatmap1.png")
-fig = h2.get_figure()
-fig.savefig("images/heatmap2.png")
+os.makedirs("images2")
+fig.savefig("images2/heatmap1.png")
 
+os.makedirs("data/clean")
 data_test.to_csv("data/clean/data_test_prepared.csv")
 data_train.to_csv("data/clean/data_train_prepared.csv")
 target.to_csv("data/clean/target.csv")

@@ -6,6 +6,7 @@ import sklearn
 import yaml
 import math
 import seaborn as sns
+import os
 
 from sklearn.model_selection import RandomizedSearchCV
 
@@ -29,10 +30,11 @@ num_col = list(data_train.select_dtypes(include=['int','float']).columns)
 fig, ax = plt.subplots(ncols=len(num_col))
 fig.set_size_inches((30,5))
 
+os.makedirs("images1")
 for i in range(len(num_col)):
     sb = seaborn.boxplot(data_train,x=num_col[i],ax=ax[i])
     fig = sb.get_figure()
-    fig.savefig("images/boxes.png") 
+    fig.savefig("images1/boxes.png") 
 
 data_train = data_train.drop(data_train[(data_train["RoomService"] > 10000*params["prepare"]["scale"])|
                                         (data_train["FoodCourt"] > 20000*params["prepare"]["scale"])|
@@ -51,5 +53,6 @@ cat1 = data_train.columns[data_train.isnull().any()].tolist()
 cat2 = ['Age','RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck']
 cat1 = [x for x in cat1 if x not in cat2]
 
+os.makedirs("data/prep")
 data_test.to_csv("data/prep/data_test_cleaned.csv")
 data_train.to_csv("data/prep/data_train_cleaned.csv")

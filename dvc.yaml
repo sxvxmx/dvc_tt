@@ -2,13 +2,14 @@ stages:
   prepare:
     cmd: python 1.py data/prep
     deps:
-    - 1.ipynb
+    - 1.py
     - datasets/space_tit_test.csv
     - datasets/space_tit_train.csv
     params:
     - prepare.scale
     outs:
     - data/prep
+    - images1
   featurize:
     cmd: python 2.py data/clean images
     deps:
@@ -16,7 +17,7 @@ stages:
     - data/prep
     outs:
     - data/clean
-    - images
+    - images2
   train:
     cmd: python 3.py data/out models/model.pkl
     deps:
@@ -26,3 +27,11 @@ stages:
     outs:
     - data/out
     - models/model.pkl
+    - metrics/
+
+metrics:
+  - metrics/gbc.yaml
+
+plots:
+  - images1/heatmap1.png
+  - images2/boxes.png
