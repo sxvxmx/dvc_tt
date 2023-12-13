@@ -1,0 +1,81 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python 1.py data/prep
+    deps:
+    - path: 1.py
+      hash: md5
+      md5: 55dafe7a1018f5c9bbbf74fd5d11a74b
+      size: 2103
+    - path: datasets/space_tit_test.csv
+      hash: md5
+      md5: 5ded803886f27a2f241763327b14a19e
+      size: 372487
+    - path: datasets/space_tit_train.csv
+      hash: md5
+      md5: 8cf8d6d39aecf7cc6466eb79b0ed6e1b
+      size: 805421
+    params:
+      params.yaml:
+        prepare.scale: 0.99
+    outs:
+    - path: data/prep
+      hash: md5
+      md5: c3276a1dc047adbadc0eabcff7c49c8c.dir
+      size: 958646
+      nfiles: 2
+    - path: images1
+      hash: md5
+      md5: 2ef6165082f47defbf04990dd4a2a4aa.dir
+      size: 26308
+      nfiles: 1
+  featurize:
+    cmd: python 2.py data/clean images
+    deps:
+    - path: 2.py
+      hash: md5
+      md5: 5c4b93d830796e7e04f48b2dbadac099
+      size: 3397
+    - path: data/prep
+      hash: md5
+      md5: c3276a1dc047adbadc0eabcff7c49c8c.dir
+      size: 958646
+      nfiles: 2
+    outs:
+    - path: data/clean
+      hash: md5
+      md5: 325a326755201ae30943da369baba84c.dir
+      size: 604371
+      nfiles: 3
+    - path: images2
+      hash: md5
+      md5: 70d36cde821d3f7164baa35d80530a0b.dir
+      size: 72487
+      nfiles: 1
+  train:
+    cmd: python 3.py data/out models/model.pkl
+    deps:
+    - path: data/clean
+      hash: md5
+      md5: 325a326755201ae30943da369baba84c.dir
+      size: 604371
+      nfiles: 3
+    params:
+      params.yaml:
+        train.learning_rate: 0.5
+        train.max_depth: 10
+    outs:
+    - path: data/out
+      hash: md5
+      md5: 1b5d9fc208b046aa17b96be58fab1fdf.dir
+      size: 37357
+      nfiles: 1
+    - path: metrics/
+      hash: md5
+      md5: 89dd2f26247fcba59cb3937f8b6a4683.dir
+      size: 25
+      nfiles: 1
+    - path: models/model.pkl
+      hash: md5
+      md5: 899cedf5eee18f82360679ced94e72df
+      size: 3964970
